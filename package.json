@@ -1,7 +1,7 @@
 {
-  "name": "pet-shop",
-  "version": "1.0.0",
-  "description": "",
+  "name": "bitvote-system",
+  "version": "0.1.0",
+  "description": "decentralized system for policy making",
   "main": "truffle.js",
   "directories": {
     "test": "test"
@@ -10,9 +10,16 @@
     "dev": "lite-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alvaromorono/bitvote-system.git"
+  },
+  "author": "alvaromorono",
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.3.0"
+    "lite-server": "^2.3.0",
+    "openzeppelin-solidity": "2.3.0",
+    "chai": "4.2.0",
+    "chai-bignumber": "3.0.0"
   }
 }
