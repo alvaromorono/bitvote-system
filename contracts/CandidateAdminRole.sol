@@ -2,42 +2,42 @@ pragma solidity ^0.5.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/access/Roles.sol";
 
-contract CandidateAdminRole {
+contract CandidateRole {
     using Roles for Roles.Role;
 
-    event CandidateAdminAdded(address indexed account);
-    event CandidateAdminRemoved(address indexed account);
+    event CandidateAdded(address indexed account);
+    event CandidateRemoved(address indexed account);
 
-    Roles.Role private _candidateAdmins;
+    Roles.Role private _candidates;
 
     constructor () internal {
-        _addCandidateAdmin(msg.sender);
+        _addCandidate(msg.sender);
     }
 
-    modifier onlyCandidateAdmin() {
-        require(isCandidateAdmin(msg.sender), "CandidateAdminRole: caller does not have the CandidateAdmin role");
+    modifier onlyCandidate() {
+        require(isCandidate(msg.sender), "CandidateRole: caller does not have the Candidate role");
         _;
     }
 
-    function isCandidateAdmin(address account) public view returns (bool) {
-        return _candidateAdmins.has(account);
+    function isCandidate(address account) public view returns (bool) {
+        return _candidates.has(account);
     }
 
-    function addCandidateAdmin(address account) public onlyCandidateAdmin {
-        _addCandidateAdmin(account);
+    function addCandidate(address account) public onlyCandidate {
+        _addCandidate(account);
     }
 
-    function renonceCandidateAdmin() public {
-        _removeCandidateAdmin(msg.sender);
+    function renonceCandidate() public {
+        _removeCandidate(msg.sender);
     }
 
-    function _addCandidateAdmin(address account) internal {
-        _candidateAdmins.add(account);
-        emit CandidateAdminAdded(account);
+    function _addCandidate(address account) internal {
+        _candidates.add(account);
+        emit CandidateAdded(account);
     }
 
-    function _removeCandidateAdmin(address account) internal {
-        _candidateAdmins.remove(account);
-        emit CandidateAdminRemoved(account);
+    function _removeCandidate(address account) internal {
+        _candidates.remove(account);
+        emit CandidateRemoved(account);
     }
 }
