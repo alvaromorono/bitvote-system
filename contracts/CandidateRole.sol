@@ -1,9 +1,9 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.11;
 
 import "../node_modules/openzeppelin-solidity/contracts/access/Roles.sol";
-import "./CandidateAdminRole.sol";
+import "./AdminRole.sol";
 
-contract CandidateRole is CandidateAdminRole {
+contract CandidateRole is AdminRole {
     using Roles for Roles.Role;
 
     event CandidateAdded(address indexed account);
@@ -20,11 +20,11 @@ contract CandidateRole is CandidateAdminRole {
         return _candidates.has(account);
     }
 
-    function addCandidate(address account) public onlyCandidateAdmin {
+    function addCandidate(address account) public onlyAdmin {
         _addCandidate(account);
     }
 
-    function removeCandidate(address account) public onlyCandidateAdmin {
+    function removeCandidate(address account) public onlyAdmin {
         _removeCandidate(account);
     }
 
