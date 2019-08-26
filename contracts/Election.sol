@@ -1,8 +1,9 @@
 pragma solidity ^0.5.11;
 
 import "./SystemManager.sol";
+import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
-contract Election is SystemManager {
+contract Election is SystemManager, Pausable {
     event votedEvent (address indexed _candidate, address _voter);
     event candidateEligible(address indexed _applicant);
     event candidateWithdrawn(address indexed _candidate);
@@ -20,7 +21,7 @@ contract Election is SystemManager {
     mapping(address => bool) public voters;
 
 
-    function vote (address _candidate) public onlyCitizen onlyCandidate {
+    function vote (address _candidate) public onlyCitizen onlyCandidate whenNotPaused {
         // require that they haven't voted before
         require(!voters[msg.sender], "You have already voted");
         // require candidate is eligible
@@ -37,7 +38,7 @@ contract Election is SystemManager {
         emit votedEvent(_candidate, msg.sender);
     }
 
-    function standForElections(string memory _name) public onlyCandidate {
+    function standForElections(string memory _name) public onlyCandidate whenPaused {
         require(!applicants[msg.sender], "You have already run for elections");
         applicants[msg.sender] = true;
         _standForElections(_name);
@@ -49,7 +50,7 @@ contract Election is SystemManager {
         emit candidateEligible(msg.sender);
     }
 
-    function withdrawFromElection() public onlyCandidate {
+    function withdrawFromElection() public onlyCandidate whenPaused {
         require(applicants[msg.sender], "You are not running for the election");
         applicants[msg.sender] = false;
         _withdrawFromElection();

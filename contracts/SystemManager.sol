@@ -1,14 +1,10 @@
 pragma solidity ^0.5.11;
 
-import "./AdminRole.sol";
 import "./CandidateRole.sol";
 import "./CitizenRole.sol";
 
-contract SystemManager is AdminRole, CandidateRole, CitizenRole {
+contract SystemManager is CandidateRole, CitizenRole {
 
-    //uint256 population;
-    address admin;
-    constructor() public {
-        admin = msg.sender;
-    }
+    // msg.sender already admin
+    
 }
