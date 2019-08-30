@@ -50,13 +50,17 @@ contract Election is SystemManager, Pausable {
         emit candidateEligible(msg.sender);
     }
 
-    function withdrawFromElection() public onlyCandidate whenPaused {
+    function withdrawFromElections() public onlyCandidate whenPaused {
         require(applicants[msg.sender], "You are not running for the election");
         applicants[msg.sender] = false;
-        _withdrawFromElection();
+        _withdrawFromElections();
     }
 
-    function _withdrawFromElection() internal {
+    function _withdrawFromElections() internal {
         emit candidateWithdrawn(msg.sender);
+    }
+
+    function scrutiny(address _candidate) public onlyCitizen onlyCandidate whenPaused returns (uint256) {
+        return candidates[_candidate].voteCount;
     }
 }
