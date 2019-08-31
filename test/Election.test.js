@@ -42,6 +42,8 @@ contract('Election', ([admin, candidate, citizen, noRoleAccount]) => {
             const event = application.logs[0].args
             assert.equal(event._applicant, candidate, 'candidate can stand for elections')
             assert.equal(event._addedParty, 'PSOE', 'adds the correct political party')
+            assert.notEqual(event._applicant, citizen, 'candidate can stand for elections')
+            assert.notEqual(event._addedParty, 'PP', 'Political party is registered correctly')
         })
 
         it('allows candidates to withdraw from elecitons', async () => {
@@ -54,6 +56,8 @@ contract('Election', ([admin, candidate, citizen, noRoleAccount]) => {
             const event = withdrawal.logs[0].args
             assert.equal(event._candidate, candidate, 'candidate removed itself from election')
             assert.equal(event._removedParty, 'PSOE', 'withdraws correct political party')
+            assert.notEqual(event._candidate, citizen, 'candidate removed correctly')
+            assert.notEqual(event._removedParty, 'PP', 'withdraws correct political party')
         })
          
         it('allows to vote', async () => {
@@ -69,6 +73,8 @@ contract('Election', ([admin, candidate, citizen, noRoleAccount]) => {
             const event = vote.logs[0].args
             assert.equal(event._candidate, candidate, 'votes for the selected candidate')
             assert.equal(event._voter, citizen, 'the user voted from their account')
+            assert.notEqual(event._candidate, citizen, 'votes for the selected candidate')
+            assert.notEqual(event._voter, noRoleAccount, 'the user voted from their account')
         })
 
         it('provides scrutiny', async () => {
@@ -78,6 +84,7 @@ contract('Election', ([admin, candidate, citizen, noRoleAccount]) => {
             await election.scrutiny(candidate, {from: citizen })                           // Success
             result = await election.candidates(candidate)
             assert.equal(result.voteCount.toNumber(), 1, 'votes are stored correctly')
+            assert.notEqual(result.voteCount.toNumber(), 11, 'votes are stored correctly')
             await election.withdrawFromElections({ from: candidate })
             await election.scrutiny(candidate, {from: citizen }).should.be.rejected;       // Candidate not running
         })
