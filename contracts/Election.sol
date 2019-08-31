@@ -1,12 +1,12 @@
 pragma solidity ^0.5.11;
 
-import "./SystemManager.sol";
+import "./CitizenRole.sol";
 import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
-contract Election is SystemManager, Pausable {
-    event votedEvent (address indexed _candidate, address _voter);
-    event candidateEligible(address indexed _applicant, string _politicalParty);
-    event candidateWithdrawn(address indexed _candidate, string _politicalParty);
+contract Election is CitizenRole, Pausable {
+    event votedEvent (address indexed _candidate, address indexed _voter);
+    event candidateEligible(address indexed _applicant, string _addedParty);
+    event candidateWithdrawn(address indexed _candidate, string _removedParty);
 
     struct Candidate {
         address account;
@@ -30,10 +30,11 @@ contract Election is SystemManager, Pausable {
         emit votedEvent(_candidate, msg.sender);
     }
 
-    function standForElections(string memory _name, address _candidate) public onlyAdmin whenPaused {
+    function standForElections(address _candidate, string memory _name) public onlyAdmin whenPaused {
+        require(bytes(_name).length > 0, "Enter a valid name");
         require(!applicants[_candidate], "This candidate is already running for elections");
         applicants[_candidate] = true;
-        _standForElections(_name, _candidate);
+        _standForElections(_candidate, _name);
     }
 
     function _standForElections(address _candidate, string memory _name) internal {
@@ -44,14 +45,15 @@ contract Election is SystemManager, Pausable {
     function withdrawFromElections(address _candidate) public onlyAdmin whenPaused {
         require(applicants[_candidate], "This candidate is not currently running for the elections");
         applicants[_candidate] = false;
-        _withdrawFromElections(_candidate, candidates[_candidate].name);
+        _withdrawFromElections(_candidate);
     }
 
-    function _withdrawFromElections(address _candidate, string memory _name) internal {
-        emit candidateWithdrawn(_candidate, _name);
+    function _withdrawFromElections(address _candidate) internal {
+        emit candidateWithdrawn(_candidate, candidates[_candidate].name);
     }
 
-    function scrutiny(address _candidate) public onlyCitizen whenPaused returns (uint256) {
+    function scrutiny(address _candidate) public view onlyCitizen whenPaused returns (uint256) {
+        require(applicants[_candidate], "This candidate is not currently running for the election");
         return candidates[_candidate].voteCount;
     }
 }
