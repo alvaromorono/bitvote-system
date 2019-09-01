@@ -18,7 +18,7 @@ contract Election is CitizenRole, Pausable {
     mapping(address => bool) public applicants;
     mapping(address => bool) public voters;
 
-    function vote (address _candidate) public onlyCitizen whenNotPaused {
+    function vote (address _candidate) external onlyCitizen whenNotPaused {
         require(!voters[msg.sender], "You have already voted");
         require(applicants[_candidate], "This candidate is not currently running for the election");
         voters[msg.sender] = true;
@@ -30,7 +30,7 @@ contract Election is CitizenRole, Pausable {
         emit votedEvent(_candidate, msg.sender);
     }
 
-    function standForElections(address _candidate, string memory _name) public onlyAdmin whenPaused {
+    function standForElections(address _candidate, string calldata _name) external onlyAdmin whenPaused {
         require(bytes(_name).length > 0, "Enter a valid name");
         require(!applicants[_candidate], "This candidate is already running for elections");
         applicants[_candidate] = true;
@@ -42,7 +42,7 @@ contract Election is CitizenRole, Pausable {
         emit candidateEligible(_candidate, _name);
     }
 
-    function withdrawFromElections(address _candidate) public onlyAdmin whenPaused {
+    function withdrawFromElections(address _candidate) external onlyAdmin whenPaused {
         require(applicants[_candidate], "This candidate is not currently running for the elections");
         applicants[_candidate] = false;
         _withdrawFromElections(_candidate);
@@ -52,7 +52,7 @@ contract Election is CitizenRole, Pausable {
         emit candidateWithdrawn(_candidate, candidates[_candidate].name);
     }
 
-    function scrutiny(address _candidate) public view onlyCitizen whenPaused returns (uint256) {
+    function scrutiny(address _candidate) external view onlyCitizen whenPaused returns (uint256) {
         require(applicants[_candidate], "This candidate is not currently running for the election");
         return candidates[_candidate].voteCount;
     }
