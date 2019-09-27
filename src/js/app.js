@@ -1,7 +1,8 @@
 App = {
   web3Provider: null,
   contracts: {},
-  admin: '0x757b7893c51861ebe4e0a948b4ee11a2263f501a',  // Setup manually
+  account: '0x0',
+  admin: '0x256894E0F554adF310f10fbc8F755D11A70a3B44',  // Setup manually
   loading: false,
   multiplier: false,
   eventCounter: 0,
@@ -18,7 +19,7 @@ App = {
       web3 = new Web3(web3.currentProvider);
     } else {
       // Specify default instance if no web3 instance provided
-      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
       web3 = new Web3(App.web3Provider);
     }
     return App.initContract();
@@ -62,19 +63,22 @@ App = {
     // Accessing the account the user is connected to
     web3.eth.getCoinbase(function(err, account) {
       if(err === null) {
-        console.log("Account: ", account);
+        console.log("Your Account: ", account);
         App.account = account;
         // Wiring it up with html. You need extra code (at the bottom) to surpass MetaMask's privacy mode
         $('#accountAddress').html("Your Account: " + account);
       }
     })
 
+    // WORK SPACE
     // This is asynchronous JavaScript, also used in tests. (JavaScript promises)
     // Load election contract
-    election = await App.contracts.Election.deployed({ from: App.admin })
-    console.log(await election.address)
+    /*election = await App.contracts.Election.deployed({ from: App.admin })
+    await election.pause({ from: App.admin })
+    await election.standForElections(App.admin, 'PSOE', { from: App.admin })
+    $('.bvt-balance').html(balance.toNumber());*/
 
-
+    // WORK SPACE ENDS
     // Asynchronous JavaScript ends here
     App.loading = false;
     loader.hide();
