@@ -6383,6 +6383,185 @@
     "version": "0.5.11+commit.c082d0b4.Emscripten.clang"
   },
   "networks": {
+    "5777": {
+      "events": {
+        "0x1823a94934f802256db7958618e5f17e3f9b5671857295f8d6e353248c63465f": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_candidate",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_voter",
+              "type": "address"
+            }
+          ],
+          "name": "votedEvent",
+          "type": "event",
+          "signature": "0x1823a94934f802256db7958618e5f17e3f9b5671857295f8d6e353248c63465f"
+        },
+        "0x988f762b5aae51fa7aff4f01022a71a1780ce4525ed6997b1c7b9c5930194ece": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_applicant",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "_addedParty",
+              "type": "string"
+            }
+          ],
+          "name": "candidateEligible",
+          "type": "event",
+          "signature": "0x988f762b5aae51fa7aff4f01022a71a1780ce4525ed6997b1c7b9c5930194ece"
+        },
+        "0x3c62119088abbb82a71c6c72938f3058a557251a99667b0e9703f814319da4d0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_candidate",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "_removedParty",
+              "type": "string"
+            }
+          ],
+          "name": "candidateWithdrawn",
+          "type": "event",
+          "signature": "0x3c62119088abbb82a71c6c72938f3058a557251a99667b0e9703f814319da4d0"
+        },
+        "0x62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "Paused",
+          "type": "event",
+          "signature": "0x62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258"
+        },
+        "0x5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "Unpaused",
+          "type": "event",
+          "signature": "0x5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa"
+        },
+        "0x6719d08c1888103bea251a4ed56406bd0c3e69723c8a1686e017e7bbe159b6f8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "PauserAdded",
+          "type": "event",
+          "signature": "0x6719d08c1888103bea251a4ed56406bd0c3e69723c8a1686e017e7bbe159b6f8"
+        },
+        "0xcd265ebaf09df2871cc7bd4133404a235ba12eff2041bb89d9c714a2621c7c7e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "PauserRemoved",
+          "type": "event",
+          "signature": "0xcd265ebaf09df2871cc7bd4133404a235ba12eff2041bb89d9c714a2621c7c7e"
+        },
+        "0x272724e48012716338baa876acb4880d28ebeeb2176425a360610dd5acb99c47": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "CitizenAdded",
+          "type": "event",
+          "signature": "0x272724e48012716338baa876acb4880d28ebeeb2176425a360610dd5acb99c47"
+        },
+        "0x86ffc4c1bcf9a37474de354dc295e858ac1bb8e5dcf6255375aafca4b7f7474f": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "CitizenRemoved",
+          "type": "event",
+          "signature": "0x86ffc4c1bcf9a37474de354dc295e858ac1bb8e5dcf6255375aafca4b7f7474f"
+        },
+        "0x44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e339": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "AdminAdded",
+          "type": "event",
+          "signature": "0x44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e339"
+        },
+        "0xa3b62bc36326052d97ea62d63c3d60308ed4c3ea8ac079dd8499f1e9c4f80c0f": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "AdminRemoved",
+          "type": "event",
+          "signature": "0xa3b62bc36326052d97ea62d63c3d60308ed4c3ea8ac079dd8499f1e9c4f80c0f"
+        }
+      },
+      "links": {},
+      "address": "0xaF2D5f855b8Fd7519A0368Fd66932Beb1E1C1086",
+      "transactionHash": "0x6bb20f51f13cda793df14704dc36cf97bd144269db9705d07341ffaaa0405e47"
+    },
     "1566831928873": {
       "events": {},
       "links": {},
@@ -6579,10 +6758,22 @@
       "links": {},
       "address": "0xB5bFBA56c2C96d4CbABEb91B3408C56eA33bfD63",
       "transactionHash": "0xccd8a7e1e7cd8095378416e636d86426eb432595e8367a87a2cafd0beccaca2b"
+    },
+    "1569601678544": {
+      "events": {},
+      "links": {},
+      "address": "0xF566fD322E0CbC904F7FcA2b01dD55e81D64E66a",
+      "transactionHash": "0x5aef6bd1b7f500b2b1231bfc4946f53c0237e0e7600b53dd2eece652367cd826"
+    },
+    "1569603933728": {
+      "events": {},
+      "links": {},
+      "address": "0x1d2C3fD9592bb96208F7685A1Ad18b78967Aa819",
+      "transactionHash": "0x29e931ed2a35e5fc2724f4befd9e16dd7535f80becc52905bb5f6c5c0d2da898"
     }
   },
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-09-07T18:41:49.442Z",
+  "updatedAt": "2019-09-27T18:06:03.975Z",
   "devdoc": {
     "methods": {
       "pause()": {
