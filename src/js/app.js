@@ -2,7 +2,7 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
-  admin: '0x256894E0F554adF310f10fbc8F755D11A70a3B44',  // Setup manually
+  admin: '0x88608Db28332c9C10108Aad008B2a3825591d9Df',  // Setup manually
   loading: false,
   multiplier: false,
   eventCounter: 0,
@@ -77,6 +77,48 @@ App = {
     await election.pause({ from: App.admin })
     await election.standForElections(App.admin, 'PSOE', { from: App.admin })
     $('.bvt-balance').html(balance.toNumber());*/
+
+
+    var electionInstance;
+    // Load contract data
+    App.contracts.Election.deployed().then(function(instance) {
+      electionInstance = instance;
+      return electionInstance.applicants();
+    }).then(function(candidatesEligible) {
+      var candidatesResults = $("#candidatesResults");
+      candidatesResults.empty();
+
+      var candidatesSelect = $('#candidatesSelect');
+      candidatesSelect.empty();
+
+      for (var i = 1; i <= 1; i++) {
+        electionInstance.candidates(i).then(function(candidate) {
+          var account = candidate[0];
+          var name = candidate[1];
+          var voteCount = candidate[2];
+
+          // Render candidate Result
+          var candidateTemplate = "<tr><th>" + account + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
+          candidatesResults.append(candidateTemplate);
+
+          // Render candidate ballot option
+          var candidateOption = "<option value='" + account + "' >" + name + "</ option>"
+          candidatesSelect.append(candidateOption);
+        });
+      }
+      return electionInstance.voters(App.account);
+    }).then(function(hasVoted) {
+      // Do not allow a user to vote
+      if(hasVoted) {
+        $('form').hide();
+      }
+      loader.hide();
+      content.show();
+    }).catch(function(error) {
+      //console.warn(error);
+    });
+
+
 
     // WORK SPACE ENDS
     // Asynchronous JavaScript ends here

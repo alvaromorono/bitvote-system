@@ -4,7 +4,7 @@ import "./CitizenRole.sol";
 import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
 contract Election is CitizenRole, Pausable {
-    event votedEvent (address indexed _candidate, address indexed _voter);
+    event votedEvent(address indexed _candidate, address indexed _voter);
     event candidateEligible(address indexed _applicant, string _addedParty);
     event candidateWithdrawn(address indexed _candidate, string _removedParty);
 
