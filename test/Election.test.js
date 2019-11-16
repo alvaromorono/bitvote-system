@@ -27,7 +27,7 @@ contract('Election', ([admin, citizen, candidate, noRoleAccount]) => {
     })
 
     describe('functioning', async () => {
-        let vote, application, withdrawal, result
+        let vote, application, withdrawal, result, reset
 
         it('allows candidates to stand for elections', async () => {
             await election.standForElections(candidate, 'PSOE', { from: admin }).should.be.rejected;            // must pause to work
@@ -44,6 +44,9 @@ contract('Election', ([admin, citizen, candidate, noRoleAccount]) => {
         })
 
         it('allows candidates to withdraw from elecitons', async () => {
+            // This is an exception: serves to confirm functioning of resetVoters
+            await election.resetVoters({ from: admin }).should.be.rejected;                         // There are no voters
+            // No votes are needed in order to confirm functioning
             await election.unpause({ from: admin })
             await election.withdrawFromElections(candidate, { from: admin }).should.be.rejected;    // Must pause to work
             await election.pause({ from: admin })
@@ -78,12 +81,26 @@ contract('Election', ([admin, citizen, candidate, noRoleAccount]) => {
             await election.scrutiny(candidate, { from: citizen }).should.be.rejected;      // Must pause to work
             await election.pause({ from: admin })
             await election.scrutiny(candidate, {from: noRoleAccount}).should.be.rejected;  // Sender is not citizen
-            await election.scrutiny(candidate, {from: citizen })                           // Success
-            result = await election.candidates(candidate)
-            assert.equal(result.voteCount.toNumber(), 1, 'votes are stored correctly')
-            assert.notEqual(result.voteCount.toNumber(), 11, 'votes are stored correctly')
+            result = await election.scrutiny(candidate, {from: admin })                    // Success
+            const event = result.logs[0].args
+            assert.equal(event._candidate, candidate, 'scrutiny provides correct candidate')
+            assert.equal(event._votes, 1, 'votes are stored correctly')
+            assert.notEqual(event._candidate, citizen, 'scrutiny provides correct candidate')
+            assert.notEqual(event._votes, 11, 'votes are stored correctly')
             await election.withdrawFromElections(candidate, { from: admin })
             await election.scrutiny(candidate, {from: citizen }).should.be.rejected;       // Candidate not running
+        })
+
+        it('resets voters', async () => {
+            await election.unpause({ from: admin })
+            await election.resetVoters({ from: admin }).should.be.rejected;     // must pause to work
+            await election.pause({ from: admin })
+            await election.resetVoters({ from: citizen }).should.be.rejected;   // sender must be admin
+            reset = await election.resetVoters({ from: admin })                 // success
+            await election.resetVoters({ from:admin }).should.be.rejected;      // voters already reset
+            const event = reset.logs[0].args
+            assert.equal(event._admin, admin, 'admin resets voters')
+            assert.notEqual(event._admin, citizen, 'admin resets voters')
         })
     })
 })

@@ -7,6 +7,8 @@ contract Election is CitizenRole, Pausable {
     event votedEvent(address indexed _candidate, address indexed _voter);
     event candidateEligible(address indexed _applicant, string _addedParty);
     event candidateWithdrawn(address indexed _candidate, string _removedParty);
+    event votersResetEvent(address indexed _admin);
+    event scrutinyEvent(address indexed _candidate, uint _votes);
 
     struct Candidate {
         address account;
@@ -17,6 +19,22 @@ contract Election is CitizenRole, Pausable {
     mapping(address => Candidate) public candidates;
     mapping(address => bool) public applicants;
     mapping(address => bool) public voters;
+    mapping(uint => address) public votersList;
+
+    uint counter = 0;
+
+    function resetVoters() external onlyAdmin whenPaused {
+        require(counter > 0,"There are no voters");
+        require(voters[votersList[counter]],"Voters already reset");
+        _resetVoters();
+    }
+
+    function _resetVoters() internal {
+        for (uint i = 1; i <= counter; i++){
+            voters[votersList[i]] = false;
+        }
+        emit votersResetEvent(msg.sender);
+    }
 
     function vote (address _candidate) external onlyCitizen whenNotPaused {
         require(!voters[msg.sender], "You have already voted");
@@ -26,6 +44,8 @@ contract Election is CitizenRole, Pausable {
     }
 
     function _vote (address _candidate) internal {
+        counter ++;
+        votersList[counter] = msg.sender;
         candidates[_candidate].voteCount ++;
         emit votedEvent(_candidate, msg.sender);
     }
@@ -52,8 +72,12 @@ contract Election is CitizenRole, Pausable {
         emit candidateWithdrawn(_candidate, candidates[_candidate].name);
     }
 
-    function scrutiny(address _candidate) external view onlyCitizen whenPaused returns (uint256) {
+    function scrutiny(address _candidate) external onlyAdmin whenPaused {
         require(applicants[_candidate], "This candidate is not currently running for the election");
-        return candidates[_candidate].voteCount;
+        _scrutiny(_candidate);
+    }
+
+    function _scrutiny(address _candidate) internal {
+        emit scrutinyEvent(_candidate, candidates[_candidate].voteCount);
     }
 }
