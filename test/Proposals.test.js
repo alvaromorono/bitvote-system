@@ -30,12 +30,11 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
     })
 
     describe('functioning', async () => {
-        let lawProposal, voteFor, voteAgainst, voteAbstention
+        let lawProposal, voteFor, voteAgainst, voteAbstention, voteLaw
 
         it('allows citizens to create laws', async () => {
+            await proposals.createProposal("Constitución", "Constitución Española", "Artículos", "Nación unida los próximos 150 años", { from: citizen }).should.be.rejected;         // must pause to work
             await proposals.pause({ from: admin })
-            await proposals.createProposal("Constitución", "Constitución Española", "Artículos", "Nación unida los próximos 150 años", { from: citizen }).should.be.rejected;         // must unpause to work
-            await proposals.unpause({ from: admin })
             await proposals.createProposal("Constitución", "Constitución Española", "Artículos", "Nación unida los próximos 150 años", { from: noRoleAccount }).should.be.rejected;   // sender is not citizen
             await proposals.createProposal("", "Constitución Española", "Artículos", "Nación unida los próximos 150 años", { from: citizen }).should.be.rejected;                     // missing input
             await proposals.createProposal("Constitución", "", "Artículos", "Nación unida los próximos 150 años", { from: citizen }).should.be.rejected;                              // missing input
@@ -58,12 +57,10 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
         })
 
         it('allows citizens to vote for a law', async () => {
-            await proposals.pause({ from: admin })
             await proposals.voteFor(1, { from: citizenFor }).should.be.rejected;         // must unpause to work
             await proposals.unpause({ from: admin })
             await proposals.voteFor(1, { from: noRoleAccount }).should.be.rejected;      // sender is not citizen
             await proposals.voteFor(2, { from: citizenFor }).should.be.rejected;         // proposal not in BOE
-            // Pendiente: "proposal already voted" en realidad es complicado eh cabrón. en teoria cnd el tiempo para votar expira se pone voted = true. Ese momento debe ser el de la funcion approve dnd se hace el recuendo con el sistema PAUSADO
             voteFor = await proposals.voteFor(1, { from: citizenFor })                   // success
             await proposals.voteFor(1 , { from: citizenFor }).should.be.rejected;        // you have already voted
             const event = voteFor.logs[0].args
@@ -79,10 +76,9 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
             await proposals.unpause({ from: admin })
             await proposals.voteAgainst(1, { from: noRoleAccount }).should.be.rejected;          // sender is not citizen
             await proposals.voteAgainst(2, { from: citizenAgainst }).should.be.rejected;         // proposal not in BOE
-            // Pendiente: "proposal already voted" en realidad es complicado eh cabrón. en teoria cnd el tiempo para votar expira se pone voted = true. Ese momento debe ser el de la funcion approve dnd se hace el recuendo con el sistema PAUSADO
-            voteFor = await proposals.voteAgainst(1, { from: citizenAgainst })                   // success
+            voteAgainst = await proposals.voteAgainst(1, { from: citizenAgainst })               // success
             await proposals.voteAgainst(1 , { from: citizenAgainst }).should.be.rejected;        // you have already voted
-            const event = voteFor.logs[0].args
+            const event = voteAgainst.logs[0].args
             assert.equal(event._proposalIdentifier, 1, 'Votes for correct proposal')
             assert.equal(event._voter, citizenAgainst, 'Records the citizen who voted it')
             assert.notEqual(event._proposalIdentifier, 2, 'Votes for correct proposal')
@@ -95,14 +91,87 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
             await proposals.unpause({ from: admin })
             await proposals.voteAbstention(1, { from: noRoleAccount }).should.be.rejected;             // sender is not citizen
             await proposals.voteAbstention(2, { from: citizenAbstention }).should.be.rejected;         // proposal not in BOE
-            // Pendiente: "proposal already voted" en realidad es complicado eh cabrón. en teoria cnd el tiempo para votar expira se pone voted = true. Ese momento debe ser el de la funcion approve dnd se hace el recuendo con el sistema PAUSADO
-            voteFor = await proposals.voteAbstention(1, { from: citizenAbstention })                   // success
+            voteAbstention = await proposals.voteAbstention(1, { from: citizenAbstention })            // success
             await proposals.voteAbstention(1 , { from: citizenAbstention }).should.be.rejected;        // you have already voted
-            const event = voteFor.logs[0].args
+            const event = voteAbstention.logs[0].args
             assert.equal(event._proposalIdentifier, 1, 'Votes for correct proposal')
             assert.equal(event._voter, citizenAbstention, 'Records the citizen who voted it')
             assert.notEqual(event._proposalIdentifier, 2, 'Votes for correct proposal')
             assert.notEqual(event._voter, noRoleAccount, 'Records the citizen who voted it')
+        })
+
+        it('allows a law to be voted', async () => {
+            await proposals.voteLaw(1, 1, { from: admin }).should.be.rejected;               // must pause to work
+            await proposals.pause({ from: admin })
+            await proposals.voteLaw(1, 1, { from: citizen }).should.be.rejected;             // sender must be admin
+            await proposals.voteLaw(23, 1, { from: admin }).should.be.rejected;              // proposal not in BOE
+            await proposals.voteLaw(1, 0, { from: admin }).should.be.rejected;               // invalid majority type
+            await proposals.voteLaw(1, 5, { from: admin }).should.be.rejected;               // invalid majority type
+            voteLaw = await proposals.voteLaw(1, 1, { from: admin })                         // success
+            await proposals.voteLaw(1, 2, { from: admin }).should.be.rejected;               // proposal already voted
+            const event = voteLaw.logs[0].args
+            assert.equal(event._proposalIdentifier, 1, 'Votes the correct proposal')
+            assert.equal(event._votesFor, 1, 'Stores voted correctly')
+            assert.equal(event._votesAgainst, 1, 'Stores voted correctly')
+            assert.equal(event._abstentions, 1, 'Stores voted correctly')
+            assert.equal(event._approved, false, 'Approves or rejects the proposal accordingly')
+            assert.equal(event._majorityType, 1, 'Stores the correct majority type')
+
+            // Special section: validating functioning of voting functions ("Proposal already voted" error)
+            await proposals.unpause({ from: admin })
+            await proposals.voteFor(1, { from: citizen }).should.be.rejected;
+            await proposals.voteAgainst(1, { from: citizen }).should.be.rejected;
+            await proposals.voteAbstention(1, { from: citizen }).should.be.rejected;
+            await proposals.pause({ from: admin })
+            // End of special section
+
+            // Absolute majority
+            await proposals.createProposal("Ley Ordinaria", "SMI", "Artículos", "Reducción del desempleo un 5%", { from: citizen })
+            await proposals.unpause({ from: admin })
+            await proposals.voteFor(2, { from: citizenFor })
+            await proposals.voteFor(2, { from: citizenAbstention })
+            await proposals.voteAgainst(2, { from: citizenAgainst })
+            await proposals.pause({ from: admin })
+            voteLaw = await proposals.voteLaw(2, 2, { from: admin })
+            const Event = voteLaw.logs[0].args
+            assert.equal(Event._proposalIdentifier, 2, 'Votes the correct proposal')
+            assert.equal(Event._votesFor, 2, 'Stores voted correctly')
+            assert.equal(Event._votesAgainst, 1, 'Stores voted correctly')
+            assert.equal(Event._abstentions, 0, 'Stores voted correctly')
+            assert.equal(Event._approved, true, 'Approves or rejects the proposal accordingly')
+            assert.equal(Event._majorityType, 2, 'Stores the correct majority type')
+
+            // 3/5 majority
+            await proposals.createProposal("Ley Ordinaria", "Impuesto Sociedades", "Artículos", "Aumento de la inversión extranjera un 5%", { from: citizen })
+            await proposals.unpause({ from: admin })
+            await proposals.voteFor(3, { from: citizenFor })
+            await proposals.voteFor(3, { from: citizenAbstention })
+            await proposals.voteAgainst(3, { from: citizenAgainst })
+            await proposals.pause({ from: admin })
+            voteLaw = await proposals.voteLaw(3, 3, { from: admin })
+            const EVENT = voteLaw.logs[0].args
+            assert.equal(EVENT._proposalIdentifier, 3, 'Votes the correct proposal')
+            assert.equal(EVENT._votesFor, 2, 'Stores voted correctly')
+            assert.equal(EVENT._votesAgainst, 1, 'Stores voted correctly')
+            assert.equal(EVENT._abstentions, 0, 'Stores voted correctly')
+            assert.equal(EVENT._approved, true, 'Approves or rejects the proposal accordingly')
+            assert.equal(EVENT._majorityType, 3, 'Stores the correct majority type')
+
+            // 2/3 majority
+            await proposals.createProposal("Ley Ordinaria", "IRPF", "Artículos", "Aumento de la recaudación extranjera un 5%", { from: citizen })
+            await proposals.unpause({ from: admin })
+            await proposals.voteFor(4, { from: citizenFor })
+            await proposals.voteFor(4, { from: citizenAbstention })
+            await proposals.voteAgainst(4, { from: citizenAgainst })
+            await proposals.pause({ from: admin })
+            voteLaw = await proposals.voteLaw(4, 4, { from: admin })
+            const event_ = voteLaw.logs[0].args
+            assert.equal(event_._proposalIdentifier, 4, 'Votes the correct proposal')
+            assert.equal(event_._votesFor, 2, 'Stores voted correctly')
+            assert.equal(event_._votesAgainst, 1, 'Stores voted correctly')
+            assert.equal(event_._abstentions, 0, 'Stores voted correctly')
+            assert.equal(event_._approved, true, 'Approves or rejects the proposal accordingly')
+            assert.equal(event_._majorityType, 4, 'Stores the correct majority type')
         })
     })
 })
