@@ -1,7 +1,7 @@
 pragma solidity ^0.5.11;
 
 import "./CitizenRole.sol";
-import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "./Pausable.sol";
 
 contract Proposals is CitizenRole, Pausable {
     event votedForEvent(uint indexed _proposalIdentifier, address indexed _voter);
@@ -41,9 +41,10 @@ contract Proposals is CitizenRole, Pausable {
 
     mapping(uint => Law) public BOE;
 
-    uint counter = 0;
+    uint public counter = 0;
 
     function voteLaw(uint _identifier, uint _majority) external onlyAdmin whenPaused {
+        require(_identifier > 0, "Proposal 0 does not exist");
         require(_identifier <= counter, "Proposal not in BOE");
         require(!BOE[_identifier].voted, "Proposal already voted");
         require(_majority >= 1, "Select a valid majority type");
@@ -95,8 +96,9 @@ contract Proposals is CitizenRole, Pausable {
     }
 
     function voteFor(uint _identifier) external onlyCitizen whenNotPaused {
+        require(_identifier > 0, "Proposal 0 does not exist");
         require(!_getLawVoters(_identifier, msg.sender), "You have already voted");
-        require(_identifier<=counter, "The proposal is not registered in the BOE");
+        require(_identifier <= counter, "The proposal is not registered in the BOE");
         require(!BOE[_identifier].voted,"The proposal has already been voted");
         _countLawVote(_identifier, msg.sender);
         _voteFor(_identifier);
@@ -108,8 +110,9 @@ contract Proposals is CitizenRole, Pausable {
     }
 
     function voteAgainst(uint _identifier) external onlyCitizen whenNotPaused {
+        require(_identifier > 0, "Proposal 0 does not exist");
         require(!_getLawVoters(_identifier, msg.sender), "You have already voted");
-        require(_identifier<=counter, "The proposal is not registered in the BOE");
+        require(_identifier <= counter, "The proposal is not registered in the BOE");
         require(!BOE[_identifier].voted,"The proposal has already been voted");
         _countLawVote(_identifier, msg.sender);
         _voteAgainst(_identifier);
@@ -121,8 +124,9 @@ contract Proposals is CitizenRole, Pausable {
     }
 
     function voteAbstention(uint _identifier) external onlyCitizen whenNotPaused {
+        require(_identifier > 0, "Proposal 0 does not exist");
         require(!_getLawVoters(_identifier, msg.sender), "You have already voted");
-        require(_identifier<=counter, "The proposal is not registered in the BOE");
+        require(_identifier <= counter, "The proposal is not registered in the BOE");
         require(!BOE[_identifier].voted,"The proposal has already been voted");
         _countLawVote(_identifier, msg.sender);
         _voteAbstention(_identifier);

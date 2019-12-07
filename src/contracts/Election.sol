@@ -1,7 +1,7 @@
 pragma solidity ^0.5.11;
 
 import "./CitizenRole.sol";
-import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "./Pausable.sol";
 
 contract Election is CitizenRole, Pausable {
     event votedEvent(address indexed _candidate, address indexed _voter);
