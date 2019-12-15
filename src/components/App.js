@@ -67,9 +67,9 @@ class App extends Component {
     })
   }
 
-  addCitizen() {
+  addCitizen(content) {
     this.setState({ loading: true })
-    this.state.proposals.methods.addCitizen(this.state.account).send({ from: this.state.account })
+    this.state.proposals.methods.addCitizen(content).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
     })

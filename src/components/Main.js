@@ -87,7 +87,7 @@ class Main extends Component {
                       <li key={key} className="list-group-item py-2">
                         <button 
                           className="btn btn-link btn-sm float-left pt-0"
-                          name={proposal.id}
+                          name={proposal.identifier}
                           onClick={(event) => {
                             this.props.voteFor(event.target.name)
                           }}
@@ -96,7 +96,7 @@ class Main extends Component {
                         </button>
                         <button
                           className="btn btn-link btn-sm float-left pt-0"
-                          name={proposal.id}
+                          name={proposal.identifier}
                           onClick={(event) => {
                             this.props.voteAbstention(event.target.name)
                           }}
@@ -105,7 +105,7 @@ class Main extends Component {
                         </button>
                         <button 
                           className="btn btn-link btn-sm float-right pt-0"
-                          name={proposal.id}
+                          name={proposal.identifier}
                           onClick={(event) => {
                             this.props.voteAgainst(event.target.name)
                           }}

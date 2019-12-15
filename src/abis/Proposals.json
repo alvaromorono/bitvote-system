@@ -19886,12 +19886,12 @@
         }
       },
       "links": {},
-      "address": "0x1d9ae6Ebd7F66b9B4fAEd936cf3fa93Ac07bDc8c",
-      "transactionHash": "0x290abf77abdabcaf90268f8f2a97f787389cc86141a32cbe4a95200d4646ebc3"
+      "address": "0xad5cF4CA00832FCd441e728e70d1FF71ea0085c5",
+      "transactionHash": "0x9781ebb56004f8805ad99c7e976862543319c86b79f76a24a28573337082df8c"
     }
   },
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-12-07T22:22:06.113Z",
+  "updatedAt": "2019-12-13T20:32:49.801Z",
   "devdoc": {
     "methods": {
       "pause()": {
