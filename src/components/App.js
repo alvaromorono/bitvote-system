@@ -115,6 +115,30 @@ class App extends Component {
     })
   }
 
+  getVotes(id) {
+    /*var proposalVotedEvent = this.state.proposals.events.proposalVotedEvent();
+    proposalVotedEvent.watch(function(err, result) {
+    if (err) {
+      console.log(err)
+      return;
+    }
+    console.log(result.args._votesFor)
+    // check that result.args._from is web3.eth.coinbase then
+    // display result.args._value in the UI and call    
+    // exampleEvent.stopWatching()
+  })
+
+  let events = await contract.getPastEvents(  
+    "proposalVotedEvent",  
+    {  
+      filter: {from:'0x2Fb623a152506960EC3Dfa02a9C1ABe6C0C8cA59'},  
+      fromBlock: 0,  
+      toBlock: 'latest'  
+    }  
+  );*/
+
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -133,6 +157,7 @@ class App extends Component {
     this.voteFor = this.voteFor.bind(this)
     this.voteAgainst = this.voteAgainst.bind(this)
     this.voteAbstention = this.voteAbstention.bind(this)
+    this.getVotes = this.getVotes.bind(this)
   }
 
   render() {
@@ -151,6 +176,7 @@ class App extends Component {
               voteFor={this.voteFor}
               voteAgainst={this.voteAgainst}
               voteAbstention={this.voteAbstention}
+              getVotes={this.getVotes}
             />
         }
       </div>

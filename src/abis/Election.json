@@ -9001,12 +9001,12 @@
         }
       },
       "links": {},
-      "address": "0xBD8A3139f28ec3B7A58775515a0269E06168E37f",
-      "transactionHash": "0x3eb48d7113b1b77fdaeb0b38efcbe81066f95772893ec6c35561cb5586d54538"
+      "address": "0x2d4201A25A6AA81AafBDfe4de97bFe075C8ba4fF",
+      "transactionHash": "0x35708bc515b2288f89d3ca7eb14f3bc6c7da2f01d2e556b7a305d2eda4496946"
     }
   },
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-12-13T20:32:49.773Z",
+  "updatedAt": "2019-12-20T16:31:58.288Z",
   "devdoc": {
     "methods": {
       "pause()": {

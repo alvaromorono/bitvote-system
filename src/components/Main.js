@@ -40,6 +40,63 @@ class Main extends Component {
               </div>
             <button type="submit" className="btn btn-primary btn-block">ADD CITIZEN</button>
             </form>
+            <p>&nbsp;</p>
+            <form onSubmit={(event)=> {
+              event.preventDefault()
+              const arg_1 = this.identifier.value
+              const arg_2 = this.majority.value
+              this.props.voteLaw(arg_1, arg_2)
+            }}>
+              <div className="form-group mr-sm-2">
+                <input
+                  id="identifier"
+                  type="number"
+                  ref={(input) => { this.identifier = input }}
+                  className="form-control"
+                  placeholder="Proposal Identifier"
+                  required />
+              </div>
+              <div className="form-group mr-sm-2">
+                <input
+                  id="majority"
+                  type="number"
+                  ref={(input) => { this.majority = input }}
+                  className="form-control"
+                  placeholder="Majority Type"
+                  required />
+              </div>
+            <button type="submit" className="btn btn-primary btn-block">VOTE LAW</button>
+            </form>
+            <p>&nbsp;</p>
+            <form onSubmit={(event)=> {
+              event.preventDefault()
+              const id = this.id.value
+              this.props.getVotes(id)
+            }}>
+              <div className="form-group mr-sm-2">
+                <input
+                  id="id"
+                  type="number"
+                  ref={(input) => { this.id = input }}
+                  className="form-control"
+                  placeholder="Proposal ID"
+                  required />
+              </div>
+              <button type="submit" className="btn btn-primary btn-block">SEE VOTES</button>
+            </form>
+            <p>&nbsp;</p>
+            <div>
+              Proposal ID: 
+            </div>
+            <div>
+              Votes for: 
+            </div>
+            <div>
+              Votes against: 
+            </div>
+            <div>
+              Abstentions: 
+            </div>
           </div>
           <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '550px' }}>
             <div className="content mr-auto ml-auto">
