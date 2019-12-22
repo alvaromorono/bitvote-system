@@ -83,9 +83,9 @@ class App extends Component {
     })
   }
 
-  createProposal(content) {
+  createProposal(proposalType, title, body, predictions) {
     this.setState({ loading: true })
-    this.state.proposals.methods.createProposal(content, content, content, content).send({ from: this.state.account })
+    this.state.proposals.methods.createProposal(proposalType, title, body, predictions).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
     })

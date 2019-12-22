@@ -103,16 +103,46 @@ class Main extends Component {
               <p>&nbsp;</p>
               <form onSubmit={(event)=> {
                 event.preventDefault()
-                const content = this.proposalContent.value
-                this.props.createProposal(content)
+                const arg_1 = this.proposalType.value
+                const arg_2 = this.title.value
+                const arg_3 = this.body.value
+                const arg_4 = this.predictions.value
+                this.props.createProposal(arg_1, arg_2, arg_3, arg_4)
               }}>
                 <div className="form-group mr-sm-2">
                   <input
-                    id="proposalContent"
+                    id="proposalType"
                     type="text"
-                    ref={(input) => { this.proposalContent = input }}
+                    ref={(input) => { this.proposalType = input }}
                     className="form-control"
-                    placeholder="Enter Law description:"
+                    placeholder="Enter Law Type:"
+                    required />
+                </div>
+                <div className="form-group mr-sm-2">
+                  <input
+                    id="title"
+                    type="text"
+                    ref={(input) => { this.title = input }}
+                    className="form-control"
+                    placeholder="Enter Law Title:"
+                    required />
+                </div>
+                <div className="form-group mr-sm-2">
+                  <input
+                    id="body"
+                    type="text"
+                    ref={(input) => { this.body = input }}
+                    className="form-control"
+                    placeholder="Enter Law Body:"
+                    required />
+                </div>
+                <div className="form-group mr-sm-2">
+                  <input
+                    id="predictions"
+                    type="text"
+                    ref={(input) => { this.predictions = input }}
+                    className="form-control"
+                    placeholder="Enter Law Predictions:"
                     required />
                 </div>
               <button type="submit" className="btn btn-primary btn-block">Create Law</button>
