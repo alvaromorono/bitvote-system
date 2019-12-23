@@ -21,7 +21,36 @@ class ProposalModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-            Wire up once Modal is operational
+            <div>
+              Proposal ID: 
+            </div>
+            <div>
+              Proposal Type: 
+            </div>
+            <div>
+              Title: 
+            </div>
+            <div>
+              Body: 
+            </div>
+            <div>
+              Predictions: 
+            </div>
+            <div>
+              Votes for: 
+            </div>
+            <div>
+              Votes against: 
+            </div>
+            <div>
+              Abstentions: 
+            </div>
+            <div>
+              Voted: 
+            </div>
+            <div>
+              Approved: 
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>

@@ -94,19 +94,6 @@ class Main extends Component {
               </div>
               <button type="submit" className="btn btn-primary btn-block">SEE VOTES</button>
             </form>
-            <p>&nbsp;</p>
-            <div>
-              Proposal ID: 
-            </div>
-            <div>
-              Votes for: 
-            </div>
-            <div>
-              Votes against: 
-            </div>
-            <div>
-              Abstentions: 
-            </div>
           </div>
           <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '550px' }}>
             <div className="content mr-auto ml-auto">
@@ -172,7 +159,38 @@ class Main extends Component {
                     </div>
                     <ul id="proposalList" className="list-group list-group-flush">
                       <li className="list-group-item">
-                        <p>{proposal.title}</p>
+                        <h1>Proposal Details</h1>
+                        <div>
+                          Proposal ID: {proposal.identifier.toString()}
+                        </div>
+                        <div>
+                          Proposal Type: {proposal.proposalType}
+                        </div>
+                        <div>
+                          Title: {proposal.title}
+                        </div>
+                        <div>
+                          Body: {proposal.body}
+                        </div>
+                        <div>
+                          Predictions: {proposal.predictions}
+                        </div>
+                        <div>
+                          Votes for: {proposal.votesFor.toString()}
+                        </div>
+                        <div>
+                          Votes against: {proposal.votesAgainst.toString()}
+                        </div>
+                        <div>
+                          Abstentions: {proposal.abstentions.toString()}
+                        </div>
+                        <div>
+                          Voted: {proposal.voted.toString()}
+                        </div>
+                        <div>
+                          Approved: {proposal.approved.toString()}
+                        </div>
+                        <p>&nbsp;</p>
                         <ButtonToolbar>
                           <Button
                             variant="primary"
