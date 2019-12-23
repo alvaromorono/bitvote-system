@@ -47,7 +47,7 @@ The multiplier system shall be put into practice to the demanded extend via a sa
 
 # Notes
 
-I have temporarily decided to cancel further attemps on reading events from the blockchain. My knowledge is insufficient and given the situation (middle of school year) I consider way more important advancing in elementary steps rather than obsesing with perfectioning the current application. Thus I announce the following:
+1. - I have temporarily decided to cancel further attemps on reading events from the blockchain. My knowledge is insufficient and given the situation (middle of school year) I consider way more important advancing in elementary steps rather than obsesing with perfectioning the current application. Thus I announce the following:
 
 1 - No further attemps on solving the event-issue should be made until it is considered the last piece of the project puzzle
 
@@ -60,6 +60,13 @@ I have temporarily decided to cancel further attemps on reading events from the 
 4) event._votesFor.toNumber()
 
 4 - Not possible to access data through BOE getter
+
+2. - I have temporarily decided to cancel further attemps on creating window pop-ups as well as changing the web screen fluidly. This situation will remain as is, until I get help either from Mr. Conejo or any other suitable react.js programmer. This situation leads to a turning-point within the development of this project since it has clearly reached a stalemate. I am not able to continue the frontend development due to my lack of knowledge, yet I resist the idea of presenting it to potential investors as it is by far unfinished.
+
+3. - Currently there are 3 things I want to develop before presenting this project to potential investors: 
+1) Include the election contract in the frontend: via App.js and be able to hold elections from the UI changing the web screen.
+2) Create pop-ups when pressing 'see proposal' button and wire proposal data up in that pop-up (via event, or not...)
+3) Design an internal logic (and alternatives to it): pausing and unpausing contracts automatically when necessary, establishing time limits for certain actions. Only if needed, remember the internal logic of the system is yet to be determined!
 
 # Dependencies
 
