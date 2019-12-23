@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import Identicon from 'identicon.js';
+import { Button, ButtonToolbar } from 'react-bootstrap';
+import ProposalModal from './ProposalModal';
 
 class Main extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      addModalShow: false
+    }
+  }
+
   render() {
+    let addModalClose = () => this.setState({ addModalShow: false });
     return (
       <div className="container-fluid mt-5">
         <div className="row">
@@ -159,17 +169,20 @@ class Main extends Component {
                         src={`data:image/png;base64,${new Identicon(proposal.author, 30).toString()}`}
                       />
                       <small className="text-muted">{proposal.author}</small>
-                      <button
-                        className="btn btn-link btn-sm float-right pt-0"
-                        //name={}
-                        //onClick=
-                      >
-                        SEE PROPOSAL
-                      </button>
                     </div>
                     <ul id="proposalList" className="list-group list-group-flush">
                       <li className="list-group-item">
                         <p>{proposal.title}</p>
+                        <ButtonToolbar>
+                          <Button
+                            variant="primary"
+                            onClick={()=> this.setState({ addModalShow: true })}
+                          >SEE PROPOSAL</Button>
+                          <ProposalModal
+                            show={this.state.addModalShow}
+                            onHide={addModalClose}
+                          />
+                        </ButtonToolbar>
                       </li>
                       <li key={key} className="list-group-item py-2">
                         <button 
