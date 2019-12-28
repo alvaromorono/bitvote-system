@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-class ProposalModal extends Component {
-
+class ElectionModal extends Component {
+  
   render() {
     return(
       <Modal
@@ -13,40 +13,25 @@ class ProposalModal extends Component {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Proposal Details
+            Candidate Details
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="container">
             <div>
-              Proposal ID: 
+              Name: 
             </div>
             <div>
-              Proposal Type: 
+              Bio: 
             </div>
             <div>
-              Title: 
+              Votes: 
             </div>
             <div>
-              Body: 
+              Elected: 
             </div>
             <div>
-              Predictions: 
-            </div>
-            <div>
-              Votes for: 
-            </div>
-            <div>
-              Votes against: 
-            </div>
-            <div>
-              Abstentions: 
-            </div>
-            <div>
-              Voted: 
-            </div>
-            <div>
-              Approved: 
+              Account: 
             </div>
           </div>
         </Modal.Body>
@@ -58,4 +43,4 @@ class ProposalModal extends Component {
   }
 }
 
-export default ProposalModal;
+export default ElectionModal;

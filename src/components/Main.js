@@ -14,7 +14,7 @@ class Main extends Component {
 
   render() {
     let addModalClose = () => this.setState({ addModalShow: false });
-    return (
+    return(
       <div className="container-fluid mt-5">
         <div className="row">
           <div className="card mb-4 ml-2 mt-3 text-center">Admin Actions
@@ -34,6 +34,7 @@ class Main extends Component {
             >
               UNPAUSE
             </button>
+            <p>&nbsp;</p>
             <form onSubmit={(event)=> {
               event.preventDefault()
               const content = this.address.value
@@ -76,23 +77,6 @@ class Main extends Component {
                   required />
               </div>
             <button type="submit" className="btn btn-primary btn-block">VOTE LAW</button>
-            </form>
-            <p>&nbsp;</p>
-            <form onSubmit={(event)=> {
-              event.preventDefault()
-              const id = this.id.value
-              this.props.getVotes(id)
-            }}>
-              <div className="form-group mr-sm-2">
-                <input
-                  id="id"
-                  type="number"
-                  ref={(input) => { this.id = input }}
-                  className="form-control"
-                  placeholder="Proposal ID"
-                  required />
-              </div>
-              <button type="submit" className="btn btn-primary btn-block">SEE VOTES</button>
             </form>
           </div>
           <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '550px' }}>
@@ -233,7 +217,7 @@ class Main extends Component {
                       </li>
                     </ul>
                   </div>
-                )
+                );
               })}
             </div>
           </main>

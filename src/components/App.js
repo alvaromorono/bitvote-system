@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import Web3 from 'web3';
 import './App.css';
 import Proposals from '../abis/Proposals.json';
+import Election from '../abis/Election.json';
 import Navbar from './Navbar';
-import Main from './Main'
+import Main from './Main';
+import Elections from './Elections';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Route from 'react-router-dom/Route';
 
 class App extends Component {
 
@@ -49,7 +53,27 @@ class App extends Component {
     } else {
       window.alert('Proposals contract not deployed to detected network.')
     }
+    // Network ID
+    const electionNetworkData = Election.networks[networkId]
+    if (electionNetworkData) {
+      const election = web3.eth.Contract(Election.abi, electionNetworkData.address)
+      this.setState({ election })
+      const electionCounter = await election.methods.counter().call()
+      this.setState({ electionCounter })
+      // Load Candidates
+      for (var ii = 1; ii <= electionCounter; ii++) {
+        const candidate = await election.methods.candidates(ii).call()
+        this.setState({
+          candidates: [...this.state.candidates, candidate]
+        })
+      }
+      this.setState({ loading: false })
+    } else {
+      window.alert('Election contract not deployed to detected network')
+    }
   }
+
+  // Proposals functions
 
   pause() {
     this.setState({ loading: true })
@@ -115,39 +139,78 @@ class App extends Component {
     })
   }
 
-  getVotes(id) {
-    /*var proposalVotedEvent = this.state.proposals.events.proposalVotedEvent();
-    proposalVotedEvent.watch(function(err, result) {
-    if (err) {
-      console.log(err)
-      return;
-    }
-    console.log(result.args._votesFor)
-    // check that result.args._from is web3.eth.coinbase then
-    // display result.args._value in the UI and call    
-    // exampleEvent.stopWatching()
-  })
+  // Election functions
 
-  let events = await contract.getPastEvents(  
-    "proposalVotedEvent",  
-    {  
-      filter: {from:'0x2Fb623a152506960EC3Dfa02a9C1ABe6C0C8cA59'},  
-      fromBlock: 0,  
-      toBlock: 'latest'  
-    }  
-  );*/
-
+  Pause() {
+    this.setState({ loading: true })
+    this.state.election.methods.pause().send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
   }
+  
+  Unpause() {
+    this.setState({ loading: true })
+    this.state.election.methods.unpause().send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+  }
+
+  AddCitizen(content) {
+    this.setState({ loading: true })
+    this.state.election.methods.addCitizen(content).send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+  }
+
+ standForElections(candidate, name) {
+   this.setState({ loading: true })
+   this.state.election.methods.standForElections(candidate, name).send({ from: this.state.account })
+   .once('recipt', (receipt) => {
+     this.setState({ loading: false })
+   })
+ }
+
+ withdrawFromElections(id) {
+  this.setState({ loading: true })
+  this.state.election.methods.withdrawFromElections(id).send({ from: this.state.account })
+  .once('recipt', (receipt) => {
+    this.setState({ loading: false })
+  })
+ }
+
+ vote(id) {
+   this.setState({ loading: true })
+   this.state.election.methods.vote(id).send({ from: this.state.account })
+   .once('receipt', (receipt) => {
+     this.setState({ loading: true })
+   })
+ }
+
+ resetVoters() {
+   this.setState({ loading: true })
+   this.state.election.methods.resetVoters().send({ from: this.state.account })
+   .once('receipt', (receipt) => {
+    this.setState({ loading: true })
+  })
+ }
 
   constructor(props) {
     super(props)
     this.state = {
       account: '',
       proposals: null,
+      election: null,
       counter: 0,
+      electionCounter: 0,
       BOE: [],
+      candidates: [],
       loading: true
     }
+
+    // Proposals functions
 
     this.pause = this.pause.bind(this)
     this.unpause = this.unpause.bind(this)
@@ -157,29 +220,68 @@ class App extends Component {
     this.voteFor = this.voteFor.bind(this)
     this.voteAgainst = this.voteAgainst.bind(this)
     this.voteAbstention = this.voteAbstention.bind(this)
-    this.getVotes = this.getVotes.bind(this)
+
+    // Election functions
+
+    this.Pause = this.Pause.bind(this)
+    this.Unpause = this.Unpause.bind(this)
+    this.AddCitizen = this.AddCitizen.bind(this)
+    this.standForElections = this.standForElections.bind(this)
+    this.withdrawFromElections = this.withdrawFromElections.bind(this)
+    this.vote = this.vote.bind(this)
+    this.resetVoters = this.resetVoters.bind(this)
   }
 
   render() {
     return (
-      <div>
-        <Navbar account={this.state.account} />
-        { this.state.loading
-          ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
-          : <Main
-              BOE={this.state.BOE}
-              pause={this.pause}
-              unpause={this.unpause}
-              addCitizen={this.addCitizen}
-              voteLaw={this.voteLaw}
-              createProposal={this.createProposal}
-              voteFor={this.voteFor}
-              voteAgainst={this.voteAgainst}
-              voteAbstention={this.voteAbstention}
-              getVotes={this.getVotes}
-            />
-        }
-      </div>
+      <Router>
+        <div>
+          <Navbar account={this.state.account} />
+          <Route path="/proposals" exact render={
+            () => {
+              return(
+                <div>
+                  { this.state.loading
+                    ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+                    : <Main
+                        BOE={this.state.BOE}
+                        pause={this.pause}
+                        unpause={this.unpause}
+                        addCitizen={this.addCitizen}
+                        voteLaw={this.voteLaw}
+                        createProposal={this.createProposal}
+                        voteFor={this.voteFor}
+                        voteAgainst={this.voteAgainst}
+                        voteAbstention={this.voteAbstention}
+                      />
+                  }
+                </div>
+              );
+            }
+          }/>
+          <Route path="/election" exact render={
+            () => {
+              return(
+                <div>
+                  { this.state.loading
+                    ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+                    : <Elections
+                        candidates={this.state.candidates}
+                        Pause={this.Pause}
+                        Unpause={this.Unpause}
+                        AddCitizen={this.AddCitizen}
+                        standForElections={this.standForElections}
+                        withdrawFromElections={this.withdrawFromElections}
+                        vote={this.vote}
+                        resetVoters={this.resetVoters}
+                      />
+                  }
+                </div>
+              );
+            }
+          }/>
+        </div>
+      </Router>
     );
   }
 }

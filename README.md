@@ -4,11 +4,11 @@ Decentralized system for policy making
 # System functioning
 1. - Roles: Citizens, Candidates and Admins
 
--The Admin serves as a 'guardian' of the system. It is the Role with the most access of the system. For the system to operate correctly a clear legislation must be drafted so that it cannot abuse its power or destroy the democracy of the system. Ultimately, the admin answers to the laws dictated by the citizens, so it is in our hands that the admin is kept under constant control. We could refer to it as a vague equivalent to the spanish "Junta Electoral Central". In case of the admin being undemocratic, it could easily be sued and answer to law, in a modern democracy. Notice the admin is not a single person, but an institution.
+-The Admin serves as a 'guardian' of the system. It is the Role with most access to the system. For the system to operate correctly a clear legislation must be drafted so that it cannot abuse its power or destroy the democracy of the system. Ultimately, the admin answers to the laws dictated by the citizens, so it is in our hands that the admin is kept under constant control. We could refer to it as a vague equivalent to the spanish "Junta Electoral Central". In case of the admin being undemocratic, it could easily be sued and answer to law, in a modern democracy. Notice the admin is not a single person, but an institution.
 
 A branch is created to continue the project with no admin. For more info see branch 'no-central-admin'.
 
--Citizens are all users of the Ethereum Blockchain granted the access to special functions, which indeed control the bitvote system. The citizen role is acquired by bureaucratic means specified by the spanish administration. And it is effectively given to an account by the admin. The admin can take away the citizenship of someone if that were needed.
+-Citizens are all users of the Ethereum Blockchain granted the access to special functions, which indeed control the bitvote system. The citizen role is acquired by bureaucratic means specified by the spanish administration. And it is effectively given to an account by the admin. The admin can take away anyone's citizenship if that were needed.
 
 -Candidates are all users with the same level of access as citizens, except for the right to stand for elections and the duty to legislate if elected. A citizen can become a candidate by bureaucratic means specified by the spanish administration. Once the process is fulfilled the admin grants the ability to be voted to the candidate. The admin can remove a citizen from the position of candidate if that were needed.
 
@@ -16,7 +16,7 @@ A branch is created in which the CandidateRole still exists. For more info see b
 
 2. - Decentralized Democracy:
 
-The essence of the proposed system is that power and responsibility are moved from the political elite back to the people of the nation. Under the bitvote-system ordinary people not only will be able to vote directly the laws to be passed, but also will have the means to propose their own laws, and all from the comfort of an internet-connected device such as a computer or laptop.
+The essence of the proposed system is that power and responsibility are moved from the political elite back to the people of the nation. Under the bitvote-system ordinary people will not only be able to vote directly the laws to be passed, but also will have the means to propose their own laws, and all from the comfort of an internet-connected device such as a computer or laptop.
 
 The procedure will be the following (to be revised): 
 After government is elected, the proposals system will pause, allowing anyone to propose a law. Once that happens, the system will unpause and a period of time will be established to vote the law. When it expires, the admin will ratify the law and approve it or not, according to the result. 
@@ -30,6 +30,8 @@ A law shall be voted twice to be approved, the first will serve as a draft, whil
 To avoid any partisan use of the institution, a maximum time for the proposed law's final version will be established.
 
 Different types of laws will require different majority types to be approved. The existing types of laws and the required majority types for each kind shall be established in the constitution in an unambiguous manner. It is also of great importance that conflicting laws are correctly identified. For example, in the voting proccess of a law which contradicts with a previous law, the affected law shall be included in an 'affected laws' section. So that citizens know the consecuences (apparent or not) of the law to be voted. If the new law passes, the old one (or its affected articles) will be overwritten. Types of laws could help to identify contradicting laws.
+
+A Law database could be of great help. And with the use of machine learning techniques, efficiency within the system could be acquired. This Big Data implementation will make sure that no contradicting laws are produced. It will be trained to find these contradictions, and via constitution, contradicting laws will declare the newest, invalid.
 
 3. - Multiplier and predictions:
 
@@ -45,30 +47,23 @@ Some other criteria might be introduced in the future to modify the value of vot
 
 The multiplier system shall be put into practice to the demanded extend via a same-vote-value votation.
 
+4. - The Constitution:
+
+As said earlier, the system will require a Constitution to allow its correct functioning. The Constitution should stipulate in an unambiguous way, among other things, the way each article can be modified, unmodifiable articles by any means. It must strictly define the functions af the admin, and its relation with government. I am a developer (not even that) I do not know a great many things about Law or Constitutional contents. What I know is that I cannot design a system on my own, I need help, help from political seniors and, in a way, of lawyers. The content of the Constitution that will make this system functional must be discussed by the greatest minds of our world, and as it can be imagined it is not collected in this article nor in my head. I have only put the first stone, the first part of it. I have demonstrated this system is functional in a technical way, and tried to do my best demonstrating it is more desirable than our current model. However that explanation is indeed lacated on another article, that will soon be online as well: 'TECNOLOGÍA BLOCKCHAIN: Smart Contracts y DAOs; un paso más hacia la Automatización, y a la Revolución Política'
+
+5. - Politicians will no longer be needed:
+
+Candidates are not required to be politicians. The function of the new candidates is to draft laws according to the will of the people proposing them. Probably lawyers or judges will be the best people to do that job, only time will tell. Political parties now have to influence the general public law by law, which will improve the quality of the political debate. Political promises are useless now, as citizens will be able to propose laws on their own. Political populism will decrease rapidly. As said in the beggining, power moves back from politicians to people. The question is: 'Will we be able to handle it?'. My answer is that not all democratic societies are ready for this system, thus it should not be implemented if there is general concern about the result. My advice is to activate the multiplier as soon as possible, in fact, a good way to meassure if a society is ready for Decentralized Democracy is their approval of the multiplier.  
+
 # Notes
 
-1. - I have temporarily decided to cancel further attemps on reading events from the blockchain. My knowledge is insufficient and given the situation (middle of school year) I consider way more important advancing in elementary steps rather than obsesing with perfectioning the current application. Thus I announce the following:
+1. - Events will not be necessary for the project until the opposite is confirmed.
 
-1 - No further attemps on solving the event-issue should be made until it is considered the last piece of the project puzzle
+2. - The 'see proposal' and 'see candidate' pop-ups have not been wired up due to insufficient knowledge. The proposal's and candidate's data have been displayed in the cards instead. It is important to mention that the presented design is not the definitive one. It is displayed in that way for experimental purposes only, and shall be rethought.
 
-2 - Meanwhile I will work on several other things such as: perfectioning the createProposal function, creating pop-ups windows, being able to change the web screen fluidly...
+3. - Including the address parameter when creating candidates is quite expendable now due to the implementation of the candidate ID. Actually, only a juridical verification is needed. If we were to substitute the Identification Number (spanish DNI) for ethereum addresses, that would be another situation, but as it is unlikely to happen in the near future, juridical verification of the candidate would be enough.
 
-3 - Currently, event data can be read only through console like this: 
-1) props = await Proposals.deployed()
-2) voteLaw = await props.voteLaw(1, 4)
-3) event = voteLaw.logs[0].args
-4) event._votesFor.toNumber()
-
-4 - Not possible to access data through BOE getter
-
-2. - Currently there are 3 things I want to develop before presenting this project to potential investors: 
-1) Include the election contract in the frontend: via App.js and be able to hold elections from the UI changing the web screen.
-2) Create pop-ups when pressing 'see proposal' button and wire proposal data up in that pop-up (via event, or not...)
-3) Design an internal logic (and alternatives to it): pausing and unpausing contracts automatically when necessary, establishing time limits for certain actions. Only if needed, remember the internal logic of the system is yet to be determined!
-
-3. - The 'see proposal' pop-up has already been created although not wired up due to insufficient knowledge. The proposal's data has been displayed in the card itself. It is important to mention that the presented design is not the definitive one. It is displayed in that way for experimental purposes only, and shall be rethought.
-
-4. - Adding the Election contract in all its forms (App.js and Main.js) is the last step before presenting it to the world
+4. - This article is not finished, thus it should be revised from time to time to increase the clarity of our message.
 
 # Dependencies
 

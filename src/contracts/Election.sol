@@ -4,80 +4,92 @@ import "./CitizenRole.sol";
 import "./Pausable.sol";
 
 contract Election is CitizenRole, Pausable {
-    event votedEvent(address indexed _candidate, address indexed _voter);
-    event candidateEligible(address indexed _applicant, string _addedParty);
-    event candidateWithdrawn(address indexed _candidate, string _removedParty);
+    event votedEvent(uint indexed _id, address indexed _candidate, string _name, address indexed _voter);
+    event candidateEligible(uint indexed _id, address indexed _applicant, string _addedParty);
+    event candidateWithdrawn(uint indexed _id, address indexed _candidate, string _removedParty);
     event votersResetEvent(address indexed _admin);
-    event scrutinyEvent(address indexed _candidate, uint _votes);
+    event scrutinyEvent(uint indexed _id, address indexed _candidate, string _name, uint _votes);
 
     struct Candidate {
+        uint id;
         address account;
         string name;
         uint voteCount;
+        bool eligible;
     }
 
-    mapping(address => Candidate) public candidates;
-    mapping(address => bool) public applicants;
+    mapping(uint => Candidate) public candidates;
     mapping(address => bool) public voters;
     mapping(uint => address) public votersList;
 
-    uint counter = 0;
+    uint votersCounter = 0;
+    uint public counter = 0;
 
     function resetVoters() external onlyAdmin whenPaused {
-        require(counter > 0,"There are no voters");
-        require(voters[votersList[counter]],"Voters already reset");
+        require(votersCounter > 0,"There are no voters");
+        require(voters[votersList[votersCounter]],"Voters already reset");
         _resetVoters();
     }
 
     function _resetVoters() internal {
-        for (uint i = 1; i <= counter; i++){
+        for (uint i = 1; i <= votersCounter; i++){
             voters[votersList[i]] = false;
         }
+        votersCounter = 0;
         emit votersResetEvent(msg.sender);
     }
 
-    function vote (address _candidate) external onlyCitizen whenNotPaused {
+    function vote (uint _id) external onlyCitizen whenNotPaused {
         require(!voters[msg.sender], "You have already voted");
-        require(applicants[_candidate], "This candidate is not currently running for the election");
+        require(_id <= counter, "Candidate does not exist");
+        require(_id > 0, "Candidate does not exist");
+        require(candidates[_id].eligible, "This candidate is not currently running for the election");
         voters[msg.sender] = true;
-        _vote(_candidate);
+        _vote(_id);
     }
 
-    function _vote (address _candidate) internal {
-        counter ++;
-        votersList[counter] = msg.sender;
-        candidates[_candidate].voteCount ++;
-        emit votedEvent(_candidate, msg.sender);
+    function _vote (uint _id) internal {
+        votersCounter ++;
+        votersList[votersCounter] = msg.sender;
+        candidates[_id].voteCount ++;
+        emit votedEvent(_id, candidates[_id].account, candidates[_id].name, msg.sender);
     }
 
     function standForElections(address _candidate, string calldata _name) external onlyAdmin whenPaused {
         require(bytes(_name).length > 0, "Enter a valid name");
-        require(!applicants[_candidate], "This candidate is already running for elections");
-        applicants[_candidate] = true;
+        for (uint ii = 1; ii <= counter; ii++) {
+            if (candidates[ii].eligible) {
+                for (uint i = 1; i <= counter; i++) {
+                    require(candidates[i].account != _candidate, "This candidate is already running for elections");
+                }
+            }
+        }
+        candidates[counter + 1].eligible = true;
         _standForElections(_candidate, _name);
     }
 
     function _standForElections(address _candidate, string memory _name) internal {
-        candidates[_candidate] = Candidate(_candidate, _name, 0);
-        emit candidateEligible(_candidate, _name);
+        counter++;
+        candidates[counter] = Candidate(counter, _candidate, _name, 0, true);
+        emit candidateEligible(counter, _candidate, _name);
     }
 
-    function withdrawFromElections(address _candidate) external onlyAdmin whenPaused {
-        require(applicants[_candidate], "This candidate is not currently running for the elections");
-        applicants[_candidate] = false;
-        _withdrawFromElections(_candidate);
+    function withdrawFromElections(uint _id) external onlyAdmin whenPaused {
+        require(candidates[_id].eligible, "This candidate is not currently running for the elections");
+        candidates[_id].eligible = false;
+        _withdrawFromElections(_id);
     }
 
-    function _withdrawFromElections(address _candidate) internal {
-        emit candidateWithdrawn(_candidate, candidates[_candidate].name);
+    function _withdrawFromElections(uint _id) internal {
+        emit candidateWithdrawn(counter, candidates[_id].account, candidates[_id].name);
     }
 
-    function scrutiny(address _candidate) external onlyAdmin whenPaused {
-        require(applicants[_candidate], "This candidate is not currently running for the election");
-        _scrutiny(_candidate);
+    function scrutiny(uint _id) external onlyAdmin whenPaused {
+        require(candidates[_id].eligible, "This candidate is not currently running for the election");
+        _scrutiny(_id);
     }
 
-    function _scrutiny(address _candidate) internal {
-        emit scrutinyEvent(_candidate, candidates[_candidate].voteCount);
+    function _scrutiny(uint _id) internal {
+        emit scrutinyEvent(_id, candidates[_id].account, candidates[_id].name, candidates[_id].voteCount);
     }
 }
