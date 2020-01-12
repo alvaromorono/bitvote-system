@@ -60,6 +60,7 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
             await proposals.voteFor(1, { from: citizenFor }).should.be.rejected;         // must unpause to work
             await proposals.unpause({ from: admin })
             await proposals.voteFor(1, { from: noRoleAccount }).should.be.rejected;      // sender is not citizen
+            await proposals.voteFor(0, { from: citizenFor }).should.be.rejected;         // proposal 0 does not exist
             await proposals.voteFor(2, { from: citizenFor }).should.be.rejected;         // proposal not in BOE
             voteFor = await proposals.voteFor(1, { from: citizenFor })                   // success
             await proposals.voteFor(1 , { from: citizenFor }).should.be.rejected;        // you have already voted
@@ -75,6 +76,7 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
             await proposals.voteAgainst(1, { from: citizenAgainst }).should.be.rejected;         // must unpause to work
             await proposals.unpause({ from: admin })
             await proposals.voteAgainst(1, { from: noRoleAccount }).should.be.rejected;          // sender is not citizen
+            await proposals.voteAgainst(0, { from: citizenAgainst }).should.be.rejected;         // proposal 0 does not exist
             await proposals.voteAgainst(2, { from: citizenAgainst }).should.be.rejected;         // proposal not in BOE
             voteAgainst = await proposals.voteAgainst(1, { from: citizenAgainst })               // success
             await proposals.voteAgainst(1 , { from: citizenAgainst }).should.be.rejected;        // you have already voted
@@ -90,6 +92,7 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
             await proposals.voteAbstention(1, { from: citizenAbstention }).should.be.rejected;         // must unpause to work
             await proposals.unpause({ from: admin })
             await proposals.voteAbstention(1, { from: noRoleAccount }).should.be.rejected;             // sender is not citizen
+            await proposals.voteAbstention(0, { from: citizenAbstention }).should.be.rejected;         // proposal 0 does not exist
             await proposals.voteAbstention(2, { from: citizenAbstention }).should.be.rejected;         // proposal not in BOE
             voteAbstention = await proposals.voteAbstention(1, { from: citizenAbstention })            // success
             await proposals.voteAbstention(1 , { from: citizenAbstention }).should.be.rejected;        // you have already voted
@@ -104,6 +107,7 @@ contract('Proposals', ([admin, citizen, citizenFor, citizenAgainst, citizenAbste
             await proposals.voteLaw(1, 1, { from: admin }).should.be.rejected;               // must pause to work
             await proposals.pause({ from: admin })
             await proposals.voteLaw(1, 1, { from: citizen }).should.be.rejected;             // sender must be admin
+            await proposals.voteLaw(0, 1, { from: admin }).should.be.rejected;               // proposal 0 does not exist
             await proposals.voteLaw(23, 1, { from: admin }).should.be.rejected;              // proposal not in BOE
             await proposals.voteLaw(1, 0, { from: admin }).should.be.rejected;               // invalid majority type
             await proposals.voteLaw(1, 5, { from: admin }).should.be.rejected;               // invalid majority type
